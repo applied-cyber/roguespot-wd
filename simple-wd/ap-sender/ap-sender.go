@@ -1,23 +1,22 @@
 package sender
 
-import "log"
+import (
+	"log"
 
-type APInfo struct {
-	Address string
-	SSID    string
-}
+	scanner "simple-wd/ap-scanner"
+)
 
 type APSender struct {
-	Queue []APInfo
+	Queue []scanner.APInfo
 }
 
 func NewSender() *APSender {
 	return &APSender{
-		Queue: []APInfo{},
+		Queue: []scanner.APInfo{},
 	}
 }
 
-func (s *APSender) send(res APInfo) {
+func (s *APSender) send(res scanner.APInfo) {
 	s.Queue = append(s.Queue, res)
 	log.Println(s.Queue)
 }
