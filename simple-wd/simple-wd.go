@@ -23,7 +23,8 @@ func main() {
 
 	// Rescanning over interval
 	interval := time.Second * time.Duration(config.ScanIntervalSeconds)
-	for range time.Tick(interval) {
+	ticker := time.NewTicker(interval)
+	for ; true; <-ticker.C {
 		accessPoints := iw.GetAccessPoints()
 
 		// Sanity check: print data
