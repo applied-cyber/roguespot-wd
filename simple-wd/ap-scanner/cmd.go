@@ -11,10 +11,7 @@ import (
 	"strings"
 )
 
-const (
-	interfaceName string = "wlan0" // Should eventually move to a configuration file
-	iwCommandName string = "iw"
-)
+const iwCommandName string = "iw"
 
 type IWCommand struct {
 	interfaceName string
@@ -72,7 +69,7 @@ func isValidInterfaceName(name string) (bool, error) {
 
 // NewIWCommand does a few checks to ensure the command can run successfully before
 // creating the command
-func NewIWCommand() (*IWCommand, error) {
+func NewIWCommand(interfaceName string) (*IWCommand, error) {
 	if !isCommandAvailable(iwCommandName) {
 		return nil, &CommandNotFoundError{iwCommandName}
 	}
