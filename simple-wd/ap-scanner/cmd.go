@@ -20,6 +20,7 @@ type IWCommand struct {
 	interfaceName string
 }
 
+// isCommandAvailable checks if a command is available in the path
 func isCommandAvailable(command string) bool {
 	if _, err := exec.LookPath(command); err != nil {
 		return false
@@ -27,6 +28,9 @@ func isCommandAvailable(command string) bool {
 	return true
 }
 
+// runCommand runs a command with the command and its arguments. Returns
+// an error if the command is not found. Exits if the command returns
+// an exit code >= 1
 func runCommand(command string, args ...string) (string, error) {
 	if !isCommandAvailable(command) {
 		return "", &CommandNotFoundError{command}
@@ -37,6 +41,7 @@ func runCommand(command string, args ...string) (string, error) {
 	output := string(cmdOutput)
 
 	if err != nil {
+		// Log the error and exit
 		log.Fatalf(
 			"Command '%s %s' failed to run: '%s'",
 			command,
@@ -144,6 +149,8 @@ func (iw *IWCommand) parseScan(output string) []APInfo {
 	return accessPoints
 }
 
+// GetAccessPoints scans for access points and parses them into an easy-to-handle
+// list of access points. Returns an empty list of APs if the scan fails
 func (iw *IWCommand) GetAccessPoints() []APInfo {
 	scanOutput, err := iw.scan()
 	if err != nil {
