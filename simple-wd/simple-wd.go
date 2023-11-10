@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"log"
 	"os"
-
+	"time"
 	scanner "simple-wd/ap-scanner"
 )
 
@@ -19,16 +19,22 @@ func main() {
 		log.Fatal(err)
 	}
 
-	accessPoints := iw.GetAccessPoints()
 
-	// Sanity check: print data
-	for _, accessPoint := range accessPoints {
-		fmt.Printf(
-			"SSID: %s, MAC Address: %s, Signal Strength: %.2f dBm\n",
-			accessPoint.SSID,
-			accessPoint.Address,
-			accessPoint.Strength,
-		)
+	// Rescanning over interval
+	INTERVAL := 30 * time.Second;
+	for range time.Tick(INTERVAL) {
+    	
+		accessPoints := iw.GetAccessPoints()
+	
+		// Sanity check: print data
+		for _, accessPoint := range accessPoints {
+			fmt.Printf(
+				"SSID: %s, MAC Address: %s, Signal Strength: %.2f dBm\n",
+				accessPoint.SSID,
+				accessPoint.Address,
+				accessPoint.Strength,
+			)
+		}
 	}
 
 }
