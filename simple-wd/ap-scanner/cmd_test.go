@@ -34,7 +34,7 @@ BSS mac3(on testwlan0)
 
 	output = strings.TrimSpace(output)
 
-	iw := &IWCommand{}
+	iw := &IWCommand{"testInterface"}
 	accessPoints := iw.parseScan(output)
 
 	require.Len(t, accessPoints, 2)

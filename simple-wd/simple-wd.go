@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 	"time"
+
 	scanner "simple-wd/ap-scanner"
 )
 
@@ -14,18 +15,18 @@ func main() {
 		log.Fatal("The wardriver program needs to be run as root")
 	}
 
-	iw, err := scanner.NewIWCommand()
+	config := NewConfig()
+	iw, err := scanner.NewIWCommand(config.InterfaceName)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-
 	// Rescanning over interval
-	INTERVAL := 30 * time.Second;
-	for range time.Tick(INTERVAL) {
-    	
+	interval := time.Second * time.Duration(config.ScanIntervalSeconds)
+	ticker := time.NewTicker(interval)
+	for ; true; <-ticker.C {
 		accessPoints := iw.GetAccessPoints()
-	
+
 		// Sanity check: print data
 		for _, accessPoint := range accessPoints {
 			fmt.Printf(
