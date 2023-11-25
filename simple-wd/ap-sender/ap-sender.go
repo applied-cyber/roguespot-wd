@@ -6,17 +6,14 @@ import (
 	"log"
 	"net/http"
 	"time"
+
+	scanner "simple-wd/ap-scanner"
 )
 
-type APInfo struct {
-	Address string `json:"bssid"`
-	SSID    string `json:"ssid"`
-}
-
 type APSender struct {
+	Queue       []scanner.APInfo
 	EndpointURL string
 	Client      *http.Client
-	Queue       []APInfo
 }
 
 func NewSender(endpointURL string) *APSender {
@@ -24,13 +21,13 @@ func NewSender(endpointURL string) *APSender {
 		Timeout: time.Second * 30,
 	}
 	return &APSender{
+		Queue:       []scanner.APInfo{},
 		EndpointURL: endpointURL,
 		Client:      client,
-		Queue:       []APInfo{},
 	}
 }
 
-func (s *APSender) Send(res APInfo) error {
+func (s *APSender) Send(res scanner.APInfo) error {
 	log.Printf("Sending: %+v\n", res)
 	jsonData, err := json.Marshal(res)
 	if err != nil {
