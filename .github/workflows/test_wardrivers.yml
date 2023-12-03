@@ -9,14 +9,14 @@ on:
       - "*/go.mod"
       - "*/go.sum"
       - "*/Makefile"
-      - ".github/workflows/build-test.yml"
+      - ".github/workflows/test_wardrivers.yml"
   pull_request:
     paths:
       - "**.go"
       - "*/go.mod"
       - "*/go.sum"
       - "*/Makefile"
-      - ".github/workflows/build-test.yml"
+      - ".github/workflows/test_wardrivers.yml"
 
 jobs:
   ci-test:
