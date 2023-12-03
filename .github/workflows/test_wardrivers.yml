@@ -1,0 +1,48 @@
+name: Build, test, lint, and format each wardriver
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "**.go"
+      - "*/go.mod"
+      - "*/go.sum"
+      - "*/Makefile"
+      - ".github/workflows/build-test.yml"
+  pull_request:
+    paths:
+      - "**.go"
+      - "*/go.mod"
+      - "*/go.sum"
+      - "*/Makefile"
+      - ".github/workflows/build-test.yml"
+
+jobs:
+  ci-test:
+    # TODO: Add support for more platforms once each wardriver supports Windows and MacOS
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        wardriver-path: [ 'simple-wd' ]
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Go 1.21
+        uses: actions/setup-go@v4
+        with:
+          go-version: 1.21
+      - name: Build wardriver
+        run: make build --directory=${{ matrix.wardriver-path }}
+      - name: Test wardriver
+        run: make test --directory=${{ matrix.wardriver-path }}
+      - name: Lint wardriver
+        uses: golangci/golangci-lint-action@v3
+        with:
+          working-directory: ${{ matrix.wardriver-path }}
+      - name: Format wardriver
+        run: |
+          # Exit with an error if gofmt reports any files to fix
+          if [ "$(gofmt -s -l ${{ matrix.wardriver-path }} | wc -l)" -gt 0 ]; then
+            exit 1
+          fi

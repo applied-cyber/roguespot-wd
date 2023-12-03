@@ -1,0 +1,28 @@
+name: Check for typos
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "**.go"
+      - "**.md"
+      - "**.yml"
+      - "**.yaml"
+      - "Makefile"
+  pull_request:
+    paths:
+      - "**.go"
+      - "**.md"
+      - "**.yml"
+      - "**.yaml"
+      - "Makefile"
+
+jobs:
+  codespell:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: codespell
+        uses: codespell-project/actions-codespell@v2
