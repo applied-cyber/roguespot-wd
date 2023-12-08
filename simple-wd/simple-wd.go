@@ -7,6 +7,7 @@ import (
 	"time"
 
 	scanner "simple-wd/ap-scanner"
+	sender "simple-wd/ap-sender"
 )
 
 func main() {
@@ -21,6 +22,8 @@ func main() {
 		log.Fatal(err)
 	}
 
+	sender := sender.NewSender("http://localhost:8080/log")
+
 	// Rescanning over interval
 	interval := time.Second * time.Duration(config.ScanIntervalSeconds)
 	ticker := time.NewTicker(interval)
@@ -29,6 +32,7 @@ func main() {
 
 		// Sanity check: print data
 		for _, accessPoint := range accessPoints {
+			sender.Send(accessPoint)
 			fmt.Printf(
 				"SSID: %s, MAC Address: %s, Signal Strength: %.2f dBm\n",
 				accessPoint.SSID,
