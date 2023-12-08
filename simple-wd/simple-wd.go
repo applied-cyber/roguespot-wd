@@ -32,7 +32,8 @@ func main() {
 
 		// Sanity check: print data
 		for _, accessPoint := range accessPoints {
-			sender.Send(accessPoint)
+			// TODO: Handle errors from send (except failed request errors as they will be enqueued again)
+			_ = sender.Send(accessPoint)
 			fmt.Printf(
 				"SSID: %s, MAC Address: %s, Signal Strength: %.2f dBm\n",
 				accessPoint.SSID,
