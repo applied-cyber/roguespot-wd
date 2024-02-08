@@ -22,7 +22,8 @@ func main() {
 		log.Fatal(err)
 	}
 
-	sender := sender.NewSender("http://localhost:8080/log")
+	endpointURL := fmt.Sprintf("http://%s:%d/log", config.Host, config.Port)
+	sender := sender.NewSender(endpointURL)
 
 	// Rescanning over interval
 	interval := time.Second * time.Duration(config.ScanIntervalSeconds)

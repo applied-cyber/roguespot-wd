@@ -1,3 +1,7 @@
+# The host address of the orchestrator. Default: localhost
+host:
+# The port to use when connecting to the orchestrator. Default: 80
+port:
 # The name of the wireless interface to use to scan for access points. Default: wlan0
 interfaceName:
 # Interval, in seconds, of how often to scan for access points. Default: 60
