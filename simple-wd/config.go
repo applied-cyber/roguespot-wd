@@ -12,6 +12,8 @@ const configFile = "config.yaml" // Default config file name
 type Configuration struct {
 	Host                string `yaml:"host"`
 	Port                uint16 `yaml:"port"` // Only allow 0-65535
+	User                string `yaml:"user"`
+	Password            string `yaml:"password"`
 	InterfaceName       string `yaml:"interfaceName"`
 	ScanIntervalSeconds uint64 `yaml:"scanInterval"`
 }
@@ -20,6 +22,8 @@ func defaultConfig() *Configuration {
 	return &Configuration{
 		Host:                "localhost",
 		Port:                80,
+		User:                "simple-wd",
+		Password:            "",
 		InterfaceName:       "wlan0",
 		ScanIntervalSeconds: 60,
 	}

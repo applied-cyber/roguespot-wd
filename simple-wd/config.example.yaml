@@ -2,6 +2,10 @@
 host:
 # The port to use when connecting to the orchestrator. Default: 80
 port:
+# The user to user when sending requests to the orchestrator. Default: simple-wd
+user:
+# The password to use when receiving requests to the orchestrator. Default: (Empty password)
+password:
 # The name of the wireless interface to use to scan for access points. Default: wlan0
 interfaceName:
 # Interval, in seconds, of how often to scan for access points. Default: 60
