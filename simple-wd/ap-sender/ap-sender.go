@@ -11,7 +11,7 @@ import (
 )
 
 type APSender struct {
-	Queue       []scanner.APInfo
+	Queue       [][]scanner.APInfo
 	EndpointURL string
 	Client      *http.Client
 }
@@ -21,21 +21,26 @@ func NewSender(endpointURL string) *APSender {
 		Timeout: time.Second * 30,
 	}
 	return &APSender{
-		Queue:       []scanner.APInfo{},
+		Queue:       [][]scanner.APInfo{},
 		EndpointURL: endpointURL,
 		Client:      client,
 	}
 }
 
-func (s *APSender) Send(res scanner.APInfo) error {
-	log.Printf("Sending: %+v\n", res)
-	jsonData, err := json.Marshal(res)
+func (s *APSender) Send(accessPoints []scanner.APInfo) error {
+	log.Printf("Sending %d access points\n", len(accessPoints))
+
+	// Indent so all access points are logged nicely
+	accessPointsJson, err := json.MarshalIndent(accessPoints, "", "\t")
+
 	if err != nil {
 		log.Printf("Error marshalling JSON: %v\n", err)
 		return err
 	}
 
-	req, err := http.NewRequest("POST", s.EndpointURL, bytes.NewBuffer(jsonData))
+	log.Printf("%+v\n", string(accessPointsJson))
+
+	req, err := http.NewRequest("POST", s.EndpointURL, bytes.NewBuffer(accessPointsJson))
 	if err != nil {
 		log.Printf("Error creating request: %v\n", err)
 		return err
@@ -45,14 +50,14 @@ func (s *APSender) Send(res scanner.APInfo) error {
 	resp, err := s.Client.Do(req)
 	if err != nil {
 		log.Printf("Error sending request: %v\n", err)
-		s.Queue = append(s.Queue, res)
+		s.Queue = append(s.Queue, accessPoints)
 		return err
 	}
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
 		log.Printf("HTTP status: %v\n", resp.Status)
-		s.Queue = append(s.Queue, res)
+		s.Queue = append(s.Queue, accessPoints)
 	}
 	return nil
 }
