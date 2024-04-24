@@ -1,2 +1,4 @@
-# Roguespot
-A collection of wardriving programs that scan access points for information and send it to the orchestrator.
+# Roguespot Wardriver
+Contains a simple wardriving program that scans access points using the `iw`
+Linux utility and sends information to the Roguespot orchestrator (the central
+server) for analysis.
